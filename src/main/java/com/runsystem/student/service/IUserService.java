@@ -9,5 +9,6 @@ public interface IUserService {
 	UserDTO loadUserByEmail(String Email);
 	UserDTO checkLogin(UserInput user);
 	List<UserDTO> findAll();
+	UserDTO registerUser(UserInput user);
 	
 }
