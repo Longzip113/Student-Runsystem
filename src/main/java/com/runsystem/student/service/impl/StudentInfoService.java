@@ -1,11 +1,7 @@
 package com.runsystem.student.service.impl;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -35,64 +31,6 @@ public class StudentInfoService implements IStudentInfoService {
 
 	@Autowired
 	StudentInputConverter studentInputConverter;
-
-	@Override
-	public List<StudentInfoDTO> searchStudentByInfo(StudentInput student) {
-		List<StudentInfoDTO> lisDtos = new ArrayList<StudentInfoDTO>();
-//	save results after query 
-		List<StudentInfoEntity> studentInfoEntities = null;
-//	save results after filtering by name
-		List<StudentInfoEntity> studentInfoEntitiesByName = new ArrayList<StudentInfoEntity>();
-//	save results final
-		List<StudentInfoEntity> resultEntities = new ArrayList<StudentInfoEntity>();
-
-		try {
-
-//			Query data by studentName, studentCode, birthDay.
-			studentInfoEntities = studentInfoRepository.findAllByDateOfBirth(
-					new SimpleDateFormat("yyyy-MM-dd").parse(student.getBirthDay().toString()),
-					new SimpleDateFormat("yyyy-MM-dd").parse(student.getBirthDay().plusDays(1).toString()));
-//			student.getBirthDay().plusDays(1) Tommorow date
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-//			Check search by StudentName and Filter list entity by StudentName
-		if (StringUtils.isNotBlank(student.getStudentName())) {
-			studentInfoEntitiesByName = filter(studentInfoEntities, student.getStudentName());
-//			Check search by StudentCode and Filter list entity by StudentCode
-			if (StringUtils.isNotBlank(student.getStudentCode())) {
-				resultEntities = filter(studentInfoEntitiesByName, student.getStudentCode());
-			} else {
-				resultEntities = studentInfoEntitiesByName;
-			}
-		}
-//			Check search by StudentCode and Filter list entity by StudentCode
-		else if (StringUtils.isNotBlank(student.getStudentCode())) {
-			resultEntities = filter(studentInfoEntities, student.getStudentCode());
-		}
-
-//			Converter list data from entity to dto
-		resultEntities.forEach((n) -> {
-			StudentInfoDTO itemDto = studentInfoConverter.toDTO(n);
-			lisDtos.add(itemDto);
-		});
-
-		return lisDtos;
-	}
-
-//			method filter by StudentCode and StudentName of Student
-	private List<StudentInfoEntity> filter(List<StudentInfoEntity> date, String item) {
-		List<StudentInfoEntity> result = new ArrayList<StudentInfoEntity>();
-		date.forEach((n) -> {
-			if (n.getStudentEntity().getStudentName().contains(item)
-					|| n.getStudentEntity().getStudentCode().contains(item)) {
-				result.add(n);
-			}
-		});
-
-		return result;
-	}
 
 	@Override
 	public StudentInfoDTO findByStudentID(Long id) {
