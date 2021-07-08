@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.runsystem.student.api.input.UserInput;
+import com.runsystem.student.api.input.UserRegisterInput;
 import com.runsystem.student.api.output.DataResponse;
-import com.runsystem.student.constant.MessageSystem;
+import com.runsystem.student.constant.ConstantSystem;
 import com.runsystem.student.dto.UserDTO;
 import com.runsystem.student.service.IUserService;
 import com.runsystem.student.service.impl.JwtService;
@@ -30,13 +31,12 @@ public class UserAPI {
 	@Autowired
 	IUserService service;
 
-	MessageSystem messageSystem;
+	ConstantSystem constantSystem;
 
 	@SuppressWarnings("static-access")
 	@GetMapping(value = "users")
 	public DataResponse<List<UserDTO>> getAll() {
-		service.findAll();
-		return new DataResponse<List<UserDTO>>(messageSystem.SUCCESS, service.findAll(),
+		return new DataResponse<List<UserDTO>>(constantSystem.SUCCESS, service.findAll(),
 				LocalDateTime.now().toString());
 	}
 
@@ -46,43 +46,41 @@ public class UserAPI {
 		String result = "";
 		UserDTO dto = null;
 		try {
-			// Thực hiện login vào hệ thống
+			// ON login in system
 			dto = service.checkLogin(user);
 			if (dto != null) {
-				result = messageSystem.TOKEN_SUCCESS + jwtService.generateTokenLogin(user.getEmail());
+				result = constantSystem.TOKEN_SUCCESS + jwtService.generateTokenLogin(user.getEmail());
 			} else {
-				result = messageSystem.WRONG_EMAIL_PASSWORD;
+				result = constantSystem.WRONG_EMAIL_PASSWORD;
 			}
 		} catch (Exception ex) {
-			result = messageSystem.SERVER_ERROR;
+			result = constantSystem.SERVER_ERROR;
 		}
 		return new DataResponse<UserDTO>(result, dto, LocalDateTime.now().toString());
 	}
 
 	@SuppressWarnings("static-access")
 	@PostMapping(value = "register")
-	public DataResponse<UserDTO> register(HttpServletRequest request, @Valid @RequestBody UserInput user) {
+	public DataResponse<UserDTO> register(HttpServletRequest request, @Valid @RequestBody UserRegisterInput user) {
 
-		// Check passwork confirm voi passwork
+		// Check password confirm and password
 		if (!user.getPassWord().equals(user.getPassWordConfirm())) {
-			return new DataResponse<UserDTO>(messageSystem.PASSWORD_PASSWORKCONFIRM, null,
+			return new DataResponse<UserDTO>(constantSystem.PASSWORD_PASSWORKCONFIRM, null,
 					LocalDateTime.now().toString());
 		}
 
 		String result = "";
 		UserDTO dto = null;
 		try {
-			
-			//thực hiện đăng ký user và kiểm tra user đã tồn tại chưa.
+			// perform user registration and check if the user already exists.
 			dto = service.registerUser(user);
 			if (dto != null) {
-				result = messageSystem.REGISTER_SUCCESS;
+				result = constantSystem.REGISTER_SUCCESS;
 			} else {
-				result = messageSystem.ACCOUNT_ALREADY;
+				result = constantSystem.ACCOUNT_ALREADY;
 			}
-			
 		} catch (Exception ex) {
-			result = messageSystem.SERVER_ERROR;
+			result = constantSystem.SERVER_ERROR;
 		}
 		return new DataResponse<UserDTO>(result, dto, LocalDateTime.now().toString());
 	}

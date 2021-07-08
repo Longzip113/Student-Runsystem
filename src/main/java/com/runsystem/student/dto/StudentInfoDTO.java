@@ -1,6 +1,6 @@
 package com.runsystem.student.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class StudentInfoDTO {
 	
@@ -12,9 +12,13 @@ public class StudentInfoDTO {
 	
 	private Double averageScore;
 	
-	private Date dateOfBirth;
+	private LocalDate dateOfBirth;
 	
-    private StudentDTO studentEntity;
+    private StudentDTO studentDTO;
+    
+    public StudentInfoDTO() {
+    	studentDTO = new StudentDTO();
+	}
 
 	public Long getInfoID() {
 		return infoID;
@@ -48,19 +52,19 @@ public class StudentInfoDTO {
 		this.averageScore = averageScore;
 	}
 
-	public Date getDateOfBirth() {
+	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public StudentDTO getStudentEntity() {
-		return studentEntity;
+	public StudentDTO getStudentDTO() {
+		return studentDTO;
 	}
 
-	public void setStudentEntity(StudentDTO studentEntity) {
-		this.studentEntity = studentEntity;
+	public void setStudentDTO(StudentDTO studentDTO) {
+		this.studentDTO = studentDTO;
 	}
 }

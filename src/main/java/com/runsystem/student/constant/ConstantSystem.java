@@ -1,6 +1,6 @@
 package com.runsystem.student.constant;
 
-public class MessageSystem {
+public class ConstantSystem {
 	public static final String SUCCESS = "Success !";
 	public static final String WRONG_EMAIL_PASSWORD = "Wrong email and password !";
 	public static final String SERVER_ERROR = "Server Error !";

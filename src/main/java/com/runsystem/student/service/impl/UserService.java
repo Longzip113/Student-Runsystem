@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.runsystem.student.api.input.UserInput;
+import com.runsystem.student.api.input.UserRegisterInput;
 import com.runsystem.student.converter.UserConverter;
 import com.runsystem.student.dto.UserDTO;
 import com.runsystem.student.entity.RoleEntity;
@@ -73,7 +74,7 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public UserDTO registerUser(UserInput user) {
+	public UserDTO registerUser(UserRegisterInput user) {
 		if (isUserByEmail(user.getEmail())) {
 			return null;
 		} else {

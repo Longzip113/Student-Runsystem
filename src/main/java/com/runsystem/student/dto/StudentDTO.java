@@ -6,9 +6,7 @@ public class StudentDTO {
 	
 	private String studentName;
 	
-	private String studentCode; 
-	
-    private StudentInfoDTO studentInfoEntity;
+	private String studentCode;
 
 	public Long getStudentId() {
 		return studentId;
@@ -32,13 +30,5 @@ public class StudentDTO {
 
 	public void setStudentCode(String studentCode) {
 		this.studentCode = studentCode;
-	}
-
-	public StudentInfoDTO getStudentInfoEntity() {
-		return studentInfoEntity;
-	}
-
-	public void setStudentInfoEntity(StudentInfoDTO studentInfoEntity) {
-		this.studentInfoEntity = studentInfoEntity;
 	}
 }

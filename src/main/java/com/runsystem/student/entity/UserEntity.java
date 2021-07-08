@@ -24,7 +24,7 @@ public class UserEntity {
 	@Column(length = 15, nullable = false)
 	private String passWord;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "role_id")
 	private RoleEntity roleEntity;
 
