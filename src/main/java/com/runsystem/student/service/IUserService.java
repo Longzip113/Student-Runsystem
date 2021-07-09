@@ -11,5 +11,4 @@ public interface IUserService {
 	UserDTO checkLogin(UserInput user);
 	List<UserDTO> findAll();
 	UserDTO registerUser(UserRegisterInput user);
-	
 }

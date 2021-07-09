@@ -28,7 +28,7 @@ public class StudentInput {
 
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate birthDay;
+	private LocalDate birthDay = null;
 	
 	@NotNull
 	@Size(max = 225, message = "Student address maxlength 225 characters")

@@ -2,7 +2,7 @@ package com.runsystem.student.dto;
 
 import java.time.LocalDate;
 
-public class StudentDTO {
+public class StudentDTO extends AbstractDto<StudentDTO>{
 
 	private Long studentId;
 
