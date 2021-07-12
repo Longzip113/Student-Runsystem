@@ -104,5 +104,27 @@ public class JwtService {
 		}
 		return true;
 	}
+	
+	public String removeTokenLogout(String username) {
+		String token = null;
+		try {
+			// Create HMAC signer
+			JWSSigner signer = new MACSigner(generateShareSecret());
+			JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
+			builder.claim(USERNAME, username);
+			builder.expirationTime(generateExpirationDate());
+			JWTClaimsSet claimsSet = builder.build();
+			SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
+			// Apply the HMAC protection
+			signedJWT.sign(signer);
+			// Serialize to compact form, produces something like
+			// eyJhbGciOiJIUzI1NiJ9.SGVsbG8sIHdvcmxkIQ.onO9Ihudz3WkiauDO2Uhyuz0Y18UASXlSc1eS0NkWyA
+			token = signedJWT.serialize();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return token;
+	}
+
 
 }

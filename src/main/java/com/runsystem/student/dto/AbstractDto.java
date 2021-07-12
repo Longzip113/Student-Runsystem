@@ -10,8 +10,6 @@ public class AbstractDto<T> {
 	private Integer maxPageItem;
 	private Integer totalPage;
 	private Integer totalItem;
-	private String sortName;
-	private String sortBy;
 	
 	public List<T> getListResult() {
 		return listResult;
@@ -42,17 +40,5 @@ public class AbstractDto<T> {
 	}
 	public void setTotalItem(Integer totalItem) {
 		this.totalItem = totalItem;
-	}
-	public String getSortBy() {
-		return sortBy;
-	}
-	public void setSortBy(String sortBy) {
-		this.sortBy = sortBy;
-	}
-	public String getSortName() {
-		return sortName;
-	}
-	public void setSortName(String sortName) {
-		this.sortName = sortName;
 	}
 }

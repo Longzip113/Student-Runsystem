@@ -39,7 +39,7 @@ public class StudentInfoService implements IStudentInfoService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public StudentInfoDTO saveStudent(StudentInput studentInput) {
+	public StudentInfoDTO saveAndUpdateStudent(StudentInput studentInput) {
 
 //		Convert data form studentInput to studentEntity
 		StudentEntity studentEntity = studentInputConverter.toStudentEntity(studentInput);

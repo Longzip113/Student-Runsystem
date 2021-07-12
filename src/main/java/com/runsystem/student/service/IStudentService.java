@@ -9,5 +9,7 @@ public interface IStudentService {
 	
 	List<StudentDTO> searchStudent(StudentDTO student, Pageble pageble);
 	
+	Boolean deleteStudent(Long id);
+	
 
 }

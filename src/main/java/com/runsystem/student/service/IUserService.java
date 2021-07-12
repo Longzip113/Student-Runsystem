@@ -9,6 +9,6 @@ import com.runsystem.student.dto.UserDTO;
 public interface IUserService {
 	UserDTO loadUserByEmail(String Email);
 	UserDTO checkLogin(UserInput user);
-	List<UserDTO> findAll();
+	List<UserDTO> findAllUser();
 	UserDTO registerUser(UserRegisterInput user);
 }

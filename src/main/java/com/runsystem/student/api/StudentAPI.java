@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,7 +50,7 @@ public class StudentAPI {
 
 	@SuppressWarnings("static-access")
 	@GetMapping(value = "students")
-	public DataResponse<StudentDTO> getAll(@RequestParam(required = false) @Size(max = 10) String studentCode,
+	public DataResponse<StudentDTO> searchStudentAPI(@RequestParam(required = false) @Size(max = 10) String studentCode,
 			@RequestParam(required = false) @Size(max = 20) String studentName,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
 			@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
@@ -62,8 +63,6 @@ public class StudentAPI {
 		studentSearch.setStudentName(StringUtils.isNotBlank(studentName) ? studentName : "");
 		studentSearch.setPage(page);
 		studentSearch.setMaxPageItem(size);
-		studentSearch.setSortBy(sortBy);
-		studentSearch.setSortName(sortName);
 
 //		Convert Date from Date to LocalDate
 		if (date != null) {
@@ -83,7 +82,7 @@ public class StudentAPI {
 	}
 
 	@GetMapping(value = "students/{id}")
-	public DataResponse<StudentInfoDTO> getOneStudent(@PathVariable Long id) {
+	public DataResponse<StudentInfoDTO> getOneStudentAPI(@PathVariable Long id) {
 //		Query by id of student
 		StudentInfoDTO studentDTO = studentInfoService.findByStudentID(id);
 		return new DataResponse<StudentInfoDTO>(resourceBundle.getString("SUCCESS"), studentDTO,
@@ -91,16 +90,21 @@ public class StudentAPI {
 	}
 
 	@PutMapping(value = "students")
-	public DataResponse<StudentInfoDTO> updateStudent(@RequestBody StudentInput student) {
-		StudentInfoDTO studentDTO = studentInfoService.saveStudent(student);
+	public DataResponse<StudentInfoDTO> updateStudentAPI(@RequestBody StudentInput student) {
+		StudentInfoDTO studentDTO = studentInfoService.saveAndUpdateStudent(student);
 		return new DataResponse<StudentInfoDTO>(resourceBundle.getString("SUCCESS"), studentDTO,
 				LocalDateTime.now().toString());
 	}
 
 	@PostMapping(value = "students")
-	public DataResponse<StudentInfoDTO> saveStudent(@RequestBody StudentInput student) {
-		StudentInfoDTO studentDTO = studentInfoService.saveStudent(student);
+	public DataResponse<StudentInfoDTO> saveStudentAPI(@RequestBody StudentInput student) {
+		StudentInfoDTO studentDTO = studentInfoService.saveAndUpdateStudent(student);
 		return new DataResponse<StudentInfoDTO>(resourceBundle.getString("SUCCESS"), studentDTO,
 				LocalDateTime.now().toString());
+	}
+	
+	@DeleteMapping(value = "/students/{id}")
+	public Boolean deleteStudentAPI(@PathVariable("id") Long id) {
+		return studentService.deleteStudent(id);
 	}
 }

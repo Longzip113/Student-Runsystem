@@ -49,7 +49,7 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public List<UserDTO> findAll() {
+	public List<UserDTO> findAllUser() {
 		
 		List<UserEntity> listUser = userRepository.findAll();
 		List<UserDTO> listDtos = new ArrayList<UserDTO>();

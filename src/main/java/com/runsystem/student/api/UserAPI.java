@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,20 +35,26 @@ public class UserAPI {
 	ResourceBundle resourceBundle = ResourceBundle.getBundle("message");
 
 	@GetMapping(value = "users")
-	public DataResponse<List<UserDTO>> getAll() {
-		return new DataResponse<List<UserDTO>>(resourceBundle.getString("SUCCESS"), service.findAll(),
+	public DataResponse<List<UserDTO>> getAllUserAPI() {
+		return new DataResponse<List<UserDTO>>(resourceBundle.getString("SUCCESS"), service.findAllUser(),
 				LocalDateTime.now().toString());
 	}
 
 	@PostMapping(value = "login")
-	public DataResponse<UserDTO> login(HttpServletRequest request, @Valid @RequestBody UserInput user) {
+	public DataResponse<UserDTO> loginAPI(HttpServletRequest request, @Valid @RequestBody UserInput user) {
 		String result = "";
 		UserDTO dto = null;
+
+		// Get the session if exists or create a new one.
+		HttpSession session = request.getSession(true);
+
 		try {
 			// ON login in system
 			dto = service.checkLogin(user);
 			if (dto != null) {
 				result = resourceBundle.getString("TOKEN_SUCCESS") + jwtService.generateTokenLogin(user.getEmail());
+				// Set session attributes
+				session.setAttribute("user", dto);
 			} else {
 				result = resourceBundle.getString("WRONG_EMAIL_PASSWORD");
 			}
@@ -58,7 +65,7 @@ public class UserAPI {
 	}
 
 	@PostMapping(value = "register")
-	public DataResponse<UserDTO> register(HttpServletRequest request, @Valid @RequestBody UserRegisterInput user) {
+	public DataResponse<UserDTO> registerAPI(HttpServletRequest request, @Valid @RequestBody UserRegisterInput user) {
 
 		// Check password confirm and password
 		if (!user.getPassWord().equals(user.getPassWordConfirm())) {
@@ -79,6 +86,16 @@ public class UserAPI {
 			result = resourceBundle.getString("SERVER_ERROR");
 		}
 		return new DataResponse<UserDTO>(result, dto, LocalDateTime.now().toString());
+	}
+
+	@GetMapping(value = "logout")
+	public DataResponse<Boolean> logoutUser(HttpServletRequest request) {
+		HttpSession session = request.getSession(true);
+//		Remove session 
+		session.removeAttribute("user");
+//		Change code Token when logout
+		jwtService.generateTokenLogin("");
+		return new DataResponse<Boolean>(resourceBundle.getString("SUCCESS"), true, LocalDateTime.now().toString());
 	}
 
 }

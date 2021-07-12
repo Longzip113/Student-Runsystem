@@ -8,5 +8,5 @@ public interface IStudentInfoService {
 	
 	StudentInfoDTO findByStudentID(Long id);
 	
-	StudentInfoDTO saveStudent(StudentInput studentInput);
+	StudentInfoDTO saveAndUpdateStudent(StudentInput studentInput);
 }

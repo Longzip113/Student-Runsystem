@@ -6,11 +6,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.runsystem.student.converter.StudentConverter;
 import com.runsystem.student.dto.StudentDTO;
 import com.runsystem.student.entity.StudentEntity;
 import com.runsystem.student.paging.Pageble;
+import com.runsystem.student.repository.StudentInfoRepository;
 import com.runsystem.student.repository.StudentRepository;
 import com.runsystem.student.service.IStudentService;
 
@@ -19,6 +22,9 @@ public class StudentService implements IStudentService {
 
 	@Autowired
 	StudentRepository studentRepository;
+
+	@Autowired
+	StudentInfoRepository studentInfoRepository;
 
 	@Autowired
 	StudentConverter studentConverter;
@@ -60,6 +66,23 @@ public class StudentService implements IStudentService {
 		});
 
 		return lisDtos;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public Boolean deleteStudent(Long id) {
+//		Query student get id StudentInfo
+		StudentEntity studentEntity = studentRepository.findOne(id);
+		
+//		Delete student and StudentInfo
+		studentInfoRepository.delete(studentEntity.getStudentInfoEntity().getInfoID());
+
+//		Check delete
+		studentEntity = studentRepository.findOne(id);
+		if (studentEntity != null) {
+			return false;
+		}
+		return true;
 	}
 
 }

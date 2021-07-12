@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	  protected void configure(HttpSecurity http) throws Exception {
 	    // Disable crsf cho đường dẫn /api/**
 	    http.csrf().ignoringAntMatchers("/api/**");
-	    http.authorizeRequests().antMatchers("/api/login**", "/api/register**").permitAll();
+	    http.authorizeRequests().antMatchers("/api/logout**", "/api/login**", "/api/register**").permitAll();
 	    http.antMatcher("/api/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
 	        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 	        .antMatchers(HttpMethod.GET, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")

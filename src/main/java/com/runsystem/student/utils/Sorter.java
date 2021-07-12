@@ -43,6 +43,11 @@ public class Sorter {
 			sortedList = result.stream().sorted(Comparator.comparingDouble(StudentDTO::getAverageScore))
 					.collect(Collectors.toList());
 			break;
+		case "Date":
+			sortedList = result.stream().sorted((o1, o2) -> {
+				return o1.getDateOfBirth().compareTo(o2.getDateOfBirth());
+			}).collect(Collectors.toList());
+			break;
 		default:
 			break;
 		}
