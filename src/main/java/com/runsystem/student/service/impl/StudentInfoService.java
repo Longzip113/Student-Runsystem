@@ -13,6 +13,7 @@ import com.runsystem.student.converter.StudentInputConverter;
 import com.runsystem.student.dto.StudentInfoDTO;
 import com.runsystem.student.entity.StudentEntity;
 import com.runsystem.student.entity.StudentInfoEntity;
+import com.runsystem.student.exception.NotFoundException;
 import com.runsystem.student.repository.StudentInfoRepository;
 import com.runsystem.student.repository.StudentRepository;
 import com.runsystem.student.service.IStudentInfoService;
@@ -34,7 +35,11 @@ public class StudentInfoService implements IStudentInfoService {
 
 	@Override
 	public StudentInfoDTO findByStudentID(Long id) {
-		return studentInfoConverter.toDTO(studentInfoRepository.findByStudentID(id));
+		StudentInfoDTO result = studentInfoConverter.toDTO(studentInfoRepository.findByStudentID(id));
+		if (result != null) {
+			return result;
+		}
+		throw new NotFoundException("Student does not exist in the system");
 	}
 
 	@Override

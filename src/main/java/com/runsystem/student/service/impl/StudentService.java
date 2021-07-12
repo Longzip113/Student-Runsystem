@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.runsystem.student.converter.StudentConverter;
 import com.runsystem.student.dto.StudentDTO;
 import com.runsystem.student.entity.StudentEntity;
+import com.runsystem.student.exception.NotFoundException;
 import com.runsystem.student.paging.Pageble;
 import com.runsystem.student.repository.StudentInfoRepository;
 import com.runsystem.student.repository.StudentRepository;
@@ -30,7 +31,7 @@ public class StudentService implements IStudentService {
 	StudentConverter studentConverter;
 
 	@Override
-	public List<StudentDTO> searchStudent(StudentDTO studentInput, Pageble pageble) {
+	public List<StudentDTO> searchStudent(StudentDTO studentInput, Pageble pageble){
 
 		List<StudentEntity> studentEntities = null;
 		List<StudentDTO> lisDtos = new ArrayList<StudentDTO>();
@@ -55,8 +56,12 @@ public class StudentService implements IStudentService {
 						studentRepository.countItem(studentInput.getStudentName(), studentInput.getStudentCode(),
 								new SimpleDateFormat("yyyy-MM-dd").parse(studentInput.getDateOfBirth().toString())));
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (java.text.ParseException ex) {
+			throw new NotFoundException("Student does not exist in the system");
+		}
+		
+		if(studentEntities == null) {
+			throw new NotFoundException("Student does not exist in the system");
 		}
 
 //		Converter list data from entity to dto
@@ -80,7 +85,7 @@ public class StudentService implements IStudentService {
 //		Check delete
 		studentEntity = studentRepository.findOne(id);
 		if (studentEntity != null) {
-			return false;
+			throw new NotFoundException("Delete failure");
 		}
 		return true;
 	}

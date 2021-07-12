@@ -19,6 +19,7 @@ import com.runsystem.student.api.input.UserInput;
 import com.runsystem.student.api.input.UserRegisterInput;
 import com.runsystem.student.api.output.DataResponse;
 import com.runsystem.student.dto.UserDTO;
+import com.runsystem.student.exception.NotFoundException;
 import com.runsystem.student.service.IUserService;
 import com.runsystem.student.service.impl.JwtService;
 
@@ -56,7 +57,7 @@ public class UserAPI {
 				// Set session attributes
 				session.setAttribute("user", dto);
 			} else {
-				result = resourceBundle.getString("WRONG_EMAIL_PASSWORD");
+				throw new NotFoundException("WRONG_EMAIL_PASSWORD");
 			}
 		} catch (Exception ex) {
 			result = resourceBundle.getString("SERVER_ERROR");
@@ -69,8 +70,7 @@ public class UserAPI {
 
 		// Check password confirm and password
 		if (!user.getPassWord().equals(user.getPassWordConfirm())) {
-			return new DataResponse<UserDTO>(resourceBundle.getString("PASSWORD_PASSWORKCONFIRM"), null,
-					LocalDateTime.now().toString());
+			throw new NotFoundException("PASSWORD_PASSWORKCONFIRM");
 		}
 		String result = "";
 		UserDTO dto = null;
@@ -83,7 +83,7 @@ public class UserAPI {
 				result = resourceBundle.getString("ACCOUNT_ALREADY");
 			}
 		} catch (Exception ex) {
-			result = resourceBundle.getString("SERVER_ERROR");
+			throw new NotFoundException("SERVER_ERROR");
 		}
 		return new DataResponse<UserDTO>(result, dto, LocalDateTime.now().toString());
 	}

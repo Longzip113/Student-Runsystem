@@ -12,6 +12,7 @@ import com.runsystem.student.converter.UserConverter;
 import com.runsystem.student.dto.UserDTO;
 import com.runsystem.student.entity.RoleEntity;
 import com.runsystem.student.entity.UserEntity;
+import com.runsystem.student.exception.NotFoundException;
 import com.runsystem.student.repository.RoleRepository;
 import com.runsystem.student.repository.UserRepository;
 import com.runsystem.student.service.IUserService;
@@ -35,7 +36,7 @@ public class UserService implements IUserService {
 		if (userEntity != null) {
 			return userConverter.toDTO(userEntity);
 		}
-		return null;
+		throw new NotFoundException("User by email does not exist in the system");
 	}
 
 	@Override
@@ -45,7 +46,7 @@ public class UserService implements IUserService {
 		if (userEntity != null) {
 			return userConverter.toDTO(userEntity);
 		}
-		return null;
+		throw new NotFoundException("wrong account or password");
 	}
 
 	@Override
@@ -54,13 +55,16 @@ public class UserService implements IUserService {
 		List<UserEntity> listUser = userRepository.findAll();
 		List<UserDTO> listDtos = new ArrayList<UserDTO>();
 		
-		listUser.forEach( (n) -> { 
-			UserDTO itemDto = userConverter.toDTO(n);
-			listDtos.add(itemDto);
-		});
+		if (listUser != null) {
+			listUser.forEach( (n) -> { 
+				UserDTO itemDto = userConverter.toDTO(n);
+				listDtos.add(itemDto);
+			});
+			
+			return listDtos;
+		}
+		throw new NotFoundException("Not user");
 		
-		
-		return listDtos;
 	}
 	
 	// check xem User đăng ký đã tồn tại chưa
@@ -76,13 +80,13 @@ public class UserService implements IUserService {
 	@Override
 	public UserDTO registerUser(UserRegisterInput user) {
 		if (isUserByEmail(user.getEmail())) {
-			return null;
+			throw new NotFoundException("Not user by this email");
 		} else {
 			
-			// lấy role user lên và gán cho user 
+			// get the user role and assign it to the user
 			RoleEntity roleEntity = roleRepository.findOne(2L);
 			
-			// Lưu User vào DB và trả user mới thêm về cho client
+			// Save the User to the DB and return the newly added user to the client
 			UserEntity entity = new UserEntity();
 			entity.setEmail(user.getEmail());
 			entity.setPassWord(user.getPassWord());

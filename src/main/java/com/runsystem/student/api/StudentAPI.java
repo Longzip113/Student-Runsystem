@@ -49,7 +49,7 @@ public class StudentAPI {
 	ResourceBundle resourceBundle = ResourceBundle.getBundle("message");
 
 	@SuppressWarnings("static-access")
-	@GetMapping(value = "students")
+	@GetMapping(value = "searchStudent")
 	public DataResponse<StudentDTO> searchStudentAPI(@RequestParam(required = false) @Size(max = 10) String studentCode,
 			@RequestParam(required = false) @Size(max = 20) String studentName,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
@@ -81,7 +81,7 @@ public class StudentAPI {
 				LocalDateTime.now().toString());
 	}
 
-	@GetMapping(value = "students/{id}")
+	@GetMapping(value = "getOneStudent/{id}")
 	public DataResponse<StudentInfoDTO> getOneStudentAPI(@PathVariable Long id) {
 //		Query by id of student
 		StudentInfoDTO studentDTO = studentInfoService.findByStudentID(id);
@@ -89,21 +89,21 @@ public class StudentAPI {
 				LocalDateTime.now().toString());
 	}
 
-	@PutMapping(value = "students")
+	@PutMapping(value = "updateStudent")
 	public DataResponse<StudentInfoDTO> updateStudentAPI(@RequestBody StudentInput student) {
 		StudentInfoDTO studentDTO = studentInfoService.saveAndUpdateStudent(student);
 		return new DataResponse<StudentInfoDTO>(resourceBundle.getString("SUCCESS"), studentDTO,
 				LocalDateTime.now().toString());
 	}
 
-	@PostMapping(value = "students")
+	@PostMapping(value = "saveStudent")
 	public DataResponse<StudentInfoDTO> saveStudentAPI(@RequestBody StudentInput student) {
 		StudentInfoDTO studentDTO = studentInfoService.saveAndUpdateStudent(student);
 		return new DataResponse<StudentInfoDTO>(resourceBundle.getString("SUCCESS"), studentDTO,
 				LocalDateTime.now().toString());
 	}
 	
-	@DeleteMapping(value = "/students/{id}")
+	@DeleteMapping(value = "deleteStudent/{id}")
 	public Boolean deleteStudentAPI(@PathVariable("id") Long id) {
 		return studentService.deleteStudent(id);
 	}
