@@ -1,26 +1,36 @@
 package com.runsystem.student.exception;
 
-import org.springframework.http.HttpStatus;
+import java.util.Date;
 
 public class ErrorResponse {
-	private HttpStatus httpStatus;
 	private String message;
+	private int statusCode;
+	private Date timestamp;
+	private String description;
+	
+	
 
-	public ErrorResponse(HttpStatus httpStatus, String message) {
+	public ErrorResponse(String message, int statusCode, Date timestamp, String description) {
 		super();
-		this.httpStatus = httpStatus;
 		this.message = message;
+		this.statusCode = statusCode;
+		this.timestamp = timestamp;
+		this.description = description;
 	}
-	public HttpStatus getHttpStatus() {
-		return httpStatus;
+
+	public int getStatusCode() {
+		return statusCode;
 	}
-	public void setHttpStatus(HttpStatus httpStatus) {
-		this.httpStatus = httpStatus;
+
+	public Date getTimestamp() {
+		return timestamp;
 	}
+
+	public String getDescription() {
+		return description;
+	}
+
 	public String getMessage() {
 		return message;
-	}
-	public void setMessage(String message) {
-		this.message = message;
 	}
 }
