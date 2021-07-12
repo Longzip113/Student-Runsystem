@@ -57,7 +57,7 @@ public class UserAPI {
 				// Set session attributes
 				session.setAttribute("user", dto);
 			} else {
-				throw new NotFoundException("WRONG_EMAIL_PASSWORD");
+				throw new NotFoundException(resourceBundle.getString("WRONG_EMAIL_PASSWORD"));
 			}
 		} catch (Exception ex) {
 			result = resourceBundle.getString("SERVER_ERROR");
@@ -70,7 +70,7 @@ public class UserAPI {
 
 		// Check password confirm and password
 		if (!user.getPassWord().equals(user.getPassWordConfirm())) {
-			throw new NotFoundException("PASSWORD_PASSWORKCONFIRM");
+			throw new NotFoundException(resourceBundle.getString("PASSWORD_PASSWORKCONFIRM"));
 		}
 		String result = "";
 		UserDTO dto = null;

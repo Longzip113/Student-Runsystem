@@ -2,6 +2,7 @@ package com.runsystem.student.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,8 @@ public class UserService implements IUserService {
 	
 	@Autowired 
 	private UserConverter userConverter;
+	
+	ResourceBundle resourceBundle = ResourceBundle.getBundle("message");
 
 	@Override
 	public UserDTO loadUserByEmail(String Email) {
@@ -36,7 +39,7 @@ public class UserService implements IUserService {
 		if (userEntity != null) {
 			return userConverter.toDTO(userEntity);
 		}
-		throw new NotFoundException("User by email does not exist in the system");
+		throw new NotFoundException(resourceBundle.getString("DOES_EXIST"));
 	}
 
 	@Override
@@ -46,7 +49,7 @@ public class UserService implements IUserService {
 		if (userEntity != null) {
 			return userConverter.toDTO(userEntity);
 		}
-		throw new NotFoundException("wrong account or password");
+		throw new NotFoundException(resourceBundle.getString("WRONG_EMAIL_PASSWORD"));
 	}
 
 	@Override
@@ -63,11 +66,11 @@ public class UserService implements IUserService {
 			
 			return listDtos;
 		}
-		throw new NotFoundException("Not user");
+		throw new NotFoundException(resourceBundle.getString("DOES_NOT_USER"));
 		
 	}
 	
-	// check xem User đăng ký đã tồn tại chưa
+	// Check if the registered User already exists
 	private Boolean isUserByEmail(String email)
 	{
 		UserEntity userEntity = userRepository.findByEmail(email);
@@ -80,7 +83,7 @@ public class UserService implements IUserService {
 	@Override
 	public UserDTO registerUser(UserRegisterInput user) {
 		if (isUserByEmail(user.getEmail())) {
-			throw new NotFoundException("Not user by this email");
+			throw new NotFoundException(resourceBundle.getString("USER_ALREADY"));
 		} else {
 			
 			// get the user role and assign it to the user

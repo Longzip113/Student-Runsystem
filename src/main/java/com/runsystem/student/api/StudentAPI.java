@@ -26,7 +26,6 @@ import com.runsystem.student.dto.StudentDTO;
 import com.runsystem.student.dto.StudentInfoDTO;
 import com.runsystem.student.paging.PageRequest;
 import com.runsystem.student.paging.Pageble;
-import com.runsystem.student.service.IStudentInfoService;
 import com.runsystem.student.service.IStudentService;
 import com.runsystem.student.utils.ConvertDate;
 import com.runsystem.student.utils.Sorter;
@@ -35,9 +34,6 @@ import com.runsystem.student.utils.Sorter;
 @RestController
 @RequestMapping("api/")
 public class StudentAPI {
-
-	@Autowired
-	IStudentInfoService studentInfoService;
 
 	@Autowired
 	IStudentService studentService;
@@ -84,21 +80,21 @@ public class StudentAPI {
 	@GetMapping(value = "getOneStudent/{id}")
 	public DataResponse<StudentInfoDTO> getOneStudentAPI(@PathVariable Long id) {
 //		Query by id of student
-		StudentInfoDTO studentDTO = studentInfoService.findByStudentID(id);
+		StudentInfoDTO studentDTO = studentService.findByStudentID(id);
 		return new DataResponse<StudentInfoDTO>(resourceBundle.getString("SUCCESS"), studentDTO,
 				LocalDateTime.now().toString());
 	}
 
 	@PutMapping(value = "updateStudent")
 	public DataResponse<StudentInfoDTO> updateStudentAPI(@RequestBody StudentInput student) {
-		StudentInfoDTO studentDTO = studentInfoService.saveAndUpdateStudent(student);
+		StudentInfoDTO studentDTO = studentService.saveAndUpdateStudent(student);
 		return new DataResponse<StudentInfoDTO>(resourceBundle.getString("SUCCESS"), studentDTO,
 				LocalDateTime.now().toString());
 	}
 
 	@PostMapping(value = "saveStudent")
 	public DataResponse<StudentInfoDTO> saveStudentAPI(@RequestBody StudentInput student) {
-		StudentInfoDTO studentDTO = studentInfoService.saveAndUpdateStudent(student);
+		StudentInfoDTO studentDTO = studentService.saveAndUpdateStudent(student);
 		return new DataResponse<StudentInfoDTO>(resourceBundle.getString("SUCCESS"), studentDTO,
 				LocalDateTime.now().toString());
 	}
