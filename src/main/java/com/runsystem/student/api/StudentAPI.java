@@ -8,6 +8,9 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,6 +49,7 @@ public class StudentAPI {
 
 	@SuppressWarnings("static-access")
 	@GetMapping(value = "searchStudent")
+	@Cacheable(value = "student", key = "#studentCode")
 	public DataResponse<StudentDTO> searchStudentAPI(@RequestParam(required = false) @Size(max = 10) String studentCode,
 			@RequestParam(required = false) @Size(max = 20) String studentName,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
@@ -86,6 +90,7 @@ public class StudentAPI {
 	}
 
 	@PutMapping(value = "updateStudent")
+	@CachePut(value = "student", key = "#student.studentId")
 	public DataResponse<StudentInfoDTO> updateStudentAPI(@RequestBody StudentInput student) {
 		StudentInfoDTO studentDTO = studentService.saveAndUpdateStudent(student);
 		return new DataResponse<StudentInfoDTO>(resourceBundle.getString("SUCCESS"), studentDTO,
@@ -100,6 +105,7 @@ public class StudentAPI {
 	}
 	
 	@DeleteMapping(value = "deleteStudent/{id}")
+	@CacheEvict(value = "student",allEntries = false, key = "#id")
 	public Boolean deleteStudentAPI(@PathVariable("id") Long id) {
 		return studentService.deleteStudent(id);
 	}
