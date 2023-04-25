@@ -1,10 +1,10 @@
 package com.runsystem.student.api.output;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DataResponse<T> {
 	private String errorMessage;
 	private T data;
